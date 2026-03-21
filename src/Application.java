@@ -72,6 +72,7 @@ public class Application {
                 Task task = taskManager.getTaskById(id);
                 if (task == null) {
                     System.out.println("Id не найден");
+                    continue;
                 }
                 System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
                 String status = scanner.nextLine();
