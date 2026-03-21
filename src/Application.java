@@ -77,6 +77,10 @@ public class Application {
                 System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
                 String status = scanner.nextLine();
 
+                // сделать, так чтобы
+                // NEW можно было переводить в IN_PROGRESS или DONE
+                // IN_PROGRESS можно было переводить в DONE, но не в NEW
+                // DONE можно было переводить в IN_PROGRESS, но не в NEW
                 if (status.equals("NEW") || status.equals("IN_PROGRESS") || status.equals("DONE")) {
                     System.out.println("Статус задачи обновлен.");
                     task.setStatus(status);
