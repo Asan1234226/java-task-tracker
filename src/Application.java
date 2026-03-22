@@ -77,15 +77,18 @@ public class Application {
                 System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
                 String status = scanner.nextLine();
 
-                // сделать, так чтобы
-                // NEW можно было переводить в IN_PROGRESS или DONE
-                // IN_PROGRESS можно было переводить в DONE, но не в NEW
-                // DONE можно было переводить в IN_PROGRESS, но не в NEW
-                if (status.equals("NEW") || status.equals("IN_PROGRESS") || status.equals("DONE")) {
-                    System.out.println("Статус задачи обновлен.");
-                    task.setStatus(status);
+                if (!status.equals("NEW") && !status.equals("IN_PROGRESS") && !status.equals("DONE")) {
+                    System.out.println("Некоректный статус");
+
+                }  else if (task.getStatus().equals("NEW") && status.equals("NEW")) {
+                    System.out.println("Нельзя менять NEW на NEW");
+                } else if (task.getStatus().equals("IN_PROGRESS") && status.equals("NEW")) {
+                    System.out.println("Нельзя менять IN_PROGRESS на NEW");
+                } else if (task.getStatus().equals("DONE") && status.equals("NEW")) {
+                    System.out.println("Нельзя менять DONE на NEW");
                 } else {
-                    System.out.println("Такого статуса нету");
+                    System.out.println("Статус обновлен ");
+                    task.setStatus(status);
                 }
             } else if (operation == 0) {
                 break;
