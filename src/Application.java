@@ -7,11 +7,13 @@ public class Application {
         TaskManager taskManager = new TaskManager();
         while (true) {
             System.out.println("1. Создать задачу");
-            System.out.println("2. Вывести список всех задач");
-            System.out.println("3. Найти задачу по id");
-            System.out.println("4. Найти задачи по статусу");
-            System.out.println("5. Удалить задачу по id");
-            System.out.println("6. Обновить статус задачи");
+            System.out.println("2. Создать эпик");
+            System.out.println("3. Создать подзадачу");
+            System.out.println("4. Вывести список всех задач");
+            System.out.println("5. Найти задачу по id");
+            System.out.println("6. Найти задачи по статусу");
+            System.out.println("7. Удалить задачу по id");
+            System.out.println("8. Обновить статус задачи");
             System.out.println("0. Выход");
             System.out.println("Выберите действие:");
             int operation = Integer.parseInt(scanner.nextLine());
@@ -27,9 +29,37 @@ public class Application {
                 taskManager.createTask(task);
 
                 System.out.println("Задача создана: " + task.getId() + " " + task.getTitle() + " " + task.getStatus());
-            }
+            } else if (operation == 2) {
 
-            if (operation == 2) {
+                System.out.println("Введите эпик задачу:");
+                String epic = scanner.nextLine();
+
+                System.out.println("Введите описание эпик:");
+                String description = scanner.nextLine();
+                Epic epic1 = new Epic(epic, description);
+                taskManager.createEpic(epic1);
+
+                System.out.println("Задача создана: " + epic1.getId() + " " + epic1.getTitle() + " " + epic1.getStatus());
+
+            } else if (operation == 3) {
+                System.out.println("Введите название подзадачи:");
+                String name = scanner.nextLine();
+
+                System.out.println("Введите описание подзадачи:");
+                String description = scanner.nextLine();
+
+                System.out.println("Введите Id эпика:");
+                int id = Integer.parseInt(scanner.nextLine());
+
+                Epic epic = taskManager.getEpicById(id);
+                if (epic == null) {
+                    System.out.println("Id не найден");
+                } else {
+                    Subtask subtask = new Subtask(name, description, epic);
+                    taskManager.createSubtask(subtask);
+                    System.out.println(id + " " + epic.getTitle() + " " + epic.getStatus() + " (" + "epicId=" + id + ")");
+                }
+            } else if (operation == 4) {
                 ArrayList<Task> tasks = taskManager.getTasks();
                 if (tasks.isEmpty()) {
                     System.out.println("Список пуст");
@@ -39,7 +69,7 @@ public class Application {
                     }
                 }
 
-            } else if (operation == 3) {
+            } else if (operation == 5) {
                 System.out.println("Введите  id задачи:");
                 int id = Integer.parseInt(scanner.nextLine());
 
@@ -49,14 +79,14 @@ public class Application {
                 } else {
                     System.out.println(id + " " + task.getTitle() + " " + task.getStatus());
                 }
-            } else if (operation == 4) {
+            } else if (operation == 6) {
                 System.out.println("Введите статус задачи:");
                 String status = scanner.nextLine();
 
                 for (Task task : taskManager.getTasksByStatus(status)) {
                     System.out.println(task.getId() + " " + task.getTitle() + " " + status);
                 }
-            } else if (operation == 5) {
+            } else if (operation == 7) {
                 System.out.println("Введите  id задачи:");
                 int id = Integer.parseInt(scanner.nextLine());
 
@@ -65,7 +95,7 @@ public class Application {
                 } else {
                     System.out.println("Id не найден");
                 }
-            } else if (operation == 6) {
+            } else if (operation == 8) {
                 System.out.println("Введите id:");
                 int id = Integer.parseInt(scanner.nextLine());
 
@@ -80,7 +110,7 @@ public class Application {
                 if (!status.equals("NEW") && !status.equals("IN_PROGRESS") && !status.equals("DONE")) {
                     System.out.println("Некоректный статус");
 
-                }  else if (task.getStatus().equals("NEW") && status.equals("NEW")) {
+                } else if (task.getStatus().equals("NEW") && status.equals("NEW")) {
                     System.out.println("Нельзя менять NEW на NEW");
                 } else if (task.getStatus().equals("IN_PROGRESS") && status.equals("NEW")) {
                     System.out.println("Нельзя менять IN_PROGRESS на NEW");
