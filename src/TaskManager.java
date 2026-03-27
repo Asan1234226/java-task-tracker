@@ -63,6 +63,16 @@ public class TaskManager {
         }
         return false;
     }
+    public ArrayList<Subtask> getSubtaskByStatus(String status) {
+        ArrayList<Subtask> list = new ArrayList<>();
+        for (Subtask subtask : subtasks) {
+            if (subtask.getStatus().equals(status)) {
+                list.add(subtask);
+            }
+        }
+        return list;
+    }
+
 // -----------------------------------------------------------------------------------------------------
     public void createEpic (Epic epic) {
         epic.setId(nextId);
@@ -88,6 +98,15 @@ public class TaskManager {
             }
         }
         return false;
+    }
+    public ArrayList<Epic> getEpicByStatus(String status) {
+        ArrayList<Epic> list = new ArrayList<>();
+        for (Epic epic : epics) {
+            if (epic.getStatus().equals(status)) {
+                list.add(epic);
+            }
+        }
+        return list;
     }
 
      public ArrayList<Task> getTasksByStatus(String status) {
