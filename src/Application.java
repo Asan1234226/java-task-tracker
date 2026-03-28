@@ -61,57 +61,42 @@ public class Application {
                 }
             } else if (operation == 4) {
                 ArrayList<Task> tasks = taskManager.getTasks();
-                if (tasks.isEmpty()) {
+                ArrayList<Epic> epic = taskManager.getEpic();
+                ArrayList<Subtask> subtasks = taskManager.getSubtask();
+                if (tasks.isEmpty() && epic.isEmpty() && subtasks.isEmpty()) {
                     System.out.println("Список пуст");
                 } else {
                     for (Task task : tasks) {
-                        System.out.println(task.getId() + " " + task.getTitle() + " " + task.getStatus());
-
-                        ArrayList<Epic> epic = taskManager.getEpic();
-                        if (epic.isEmpty()) {
-                            System.out.println("Список пуст");
-                        } else {
-                            for (Epic epic1 : epic) {
-                                System.out.println(epic1.getId() + " " + epic1.getTitle() + " " + epic1.getStatus());
-
-                                ArrayList<Subtask> subtasks = taskManager.getSubtask();
-                                if (subtasks.isEmpty()) {
-                                    System.out.println("Список пуст");
-                                } else {
-                                    for (Subtask subtask : subtasks) {
-                                        System.out.println(subtask.getId() + " " + subtask.getTitle() + " " + subtask.getStatus());
-                                    }
-                                }
-                            }
-                        }
+                        System.out.println(task.getId() + " [TASK] " + " " + task.getTitle() + " " + task.getStatus());
+                    }
+                    for (Epic epic1 : epic) {
+                        System.out.println(epic1.getId() + " [EPIC] " + " " + epic1.getTitle() + " " + epic1.getStatus());
+                    }
+                    for (Subtask subtask : subtasks) {
+                        System.out.println(subtask.getId() + " [SUBTASK] " + " " + subtask.getTitle() + " " + subtask.getStatus());
                     }
                 }
 
             } else if (operation == 5) {
-                System.out.println("Введите  id задачи:");
+                System.out.println("Введите id задачи:");
                 int id = Integer.parseInt(scanner.nextLine());
 
                 Task task = taskManager.getTaskById(id);
-                if (task == null) {
-                    System.out.println("Id не найден");
-                } else {
-                    System.out.println(id + " " + task.getTitle() + " " + task.getStatus());
+                if (task != null) {
+                    System.out.println(task.getId() + " " + task.getTitle() + " " + task.getStatus());
+                    return;
                 }
-                System.out.println("Введите id epic задачи:");
-                int id1 = Integer.parseInt(scanner.nextLine());
-                Epic epic = taskManager.getEpicById(id1);
-                if (epic == null) {
-                    System.out.println("Id не найден");
-                } else {
-                    System.out.println(id + " " + epic.getTitle() + " " + epic.getStatus());
+                Epic epic = taskManager.getEpicById(id);
+                if (epic != null) {
+                    System.out.println(epic.getId() + " " + epic.getTitle() + " " + epic.getStatus());
+                    return;
                 }
-                System.out.println("Введите id subtask подзадачи:");
-                int id2 = Integer.parseInt(scanner.nextLine());
-                Subtask subtask = taskManager.getSubtaskById(id2);
-                if (subtask == null) {
-                    System.out.println("Id не найден");
+                Subtask subtask = taskManager.getSubtaskById(id);
+                if (subtask != null) {
+                    System.out.println(subtask.getId() + " " + subtask.getTitle() + " " + subtask.getStatus());
+                    return;
                 } else {
-                    System.out.println(id + " " + subtask.getTitle() + " " + subtask.getStatus());
+                    System.out.println("Id не найден");
                 }
             } else if (operation == 6) {
                 System.out.println("Введите статус задачи:");
@@ -130,22 +115,19 @@ public class Application {
                 int id = Integer.parseInt(scanner.nextLine());
 
                 if (taskManager.removeTaskById(id)) {
-                    System.out.println("Задача удаленна");
+                    System.out.println("Задача удалена");
+                    return;
                 }
-                System.out.println("Введите  id epic задачи:");
-                int id1 = Integer.parseInt(scanner.nextLine());
-
-                if (taskManager.removeEpicById(id1)) {
-                    System.out.println("Задача удаленна");
-                }
-                System.out.println("Введите  id подзадачи:");
-                int id3 = Integer.parseInt(scanner.nextLine());
-
-                if (taskManager.removeSubtaskById(id3)) {
-                    System.out.println("Задача удаленна");
-                } else {
-                    System.out.println("Id не найден");
-                }
+                if (taskManager.removeEpicById(id)) {
+                        System.out.println("Задача удалена");
+                        return;
+                    }
+                    if (taskManager.removeSubtaskById(id)) {
+                        System.out.println("Задача удалена");
+                        return;
+                    } else {
+                        System.out.println("Id не найден");
+                    }
 
             } else if (operation == 8) {
                 System.out.println("Введите id:");
@@ -182,32 +164,26 @@ public class Application {
 
 //  }
 //    } else if (operation == 7) {
-//                System.out.println("Введите  id задачи:");
-//                int id = Integer.parseInt(scanner.nextLine());
+//            System.out.println("Введите  id задачи:");
+//            int id = Integer.parseInt(scanner.nextLine());
 //
-//                if (taskManager.removeTaskById(id)) {
-//                    System.out.println("Задача удаленна");
-//                } else {
-//                    System.out.println("Id не найден");
-//                }
-//                System.out.println("Введите  id epic задачи:");
-//                int id1 = Integer.parseInt(scanner.nextLine());
+//            if (taskManager.removeTaskById(id)) {
+//                System.out.println("Задача удаленна");
+//            }
+//            System.out.println("Введите  id epic задачи:");
+//            int id1 = Integer.parseInt(scanner.nextLine());
 //
-//                if (taskManager.removeEpicById(id1)) {
-//                    System.out.println("Задача удаленна");
-//                } else {
-//                    System.out.println("Id не найден");
-//                }
-//                System.out.println("Введите  id подзадачи:");
-//                int id3 = Integer.parseInt(scanner.nextLine());
+//            if (taskManager.removeEpicById(id1)) {
+//                System.out.println("Задача удаленна");
+//            }
+//            System.out.println("Введите  id подзадачи:");
+//            int id3 = Integer.parseInt(scanner.nextLine());
 //
-//                if (taskManager.removeSubtaskById(id3)) {
-//                    System.out.println("Задача удаленна");
-//                } else {
-//                    System.out.println("Id не найден");
-//                }
-
-
+//            if (taskManager.removeSubtaskById(id3)) {
+//                System.out.println("Задача удаленна");
+//            } else {
+//                System.out.println("Id не найден");
+//            }
 
 
 
