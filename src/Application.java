@@ -133,53 +133,31 @@ public class Application {
                 System.out.println("Введите id:");
                 int id = Integer.parseInt(scanner.nextLine());
 
-
                 Task task = taskManager.getTaskById(id);
-                if (task == null) {
-                    System.out.println("Id не найден");
+                if (task != null) {
+                    System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
+                    String status = scanner.nextLine();
+                    task.setStatus(status);
                     continue;
                 }
-                System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
-                String status = scanner.nextLine();
 
-                if (!status.equals("NEW") && !status.equals("IN_PROGRESS") && !status.equals("DONE")) {
-                    System.out.println("Некоректный статус");
-
-                } else if (task.getStatus().equals("NEW") && status.equals("NEW")) {
-                    System.out.println("Нельзя менять NEW на NEW");
-                } else if (task.getStatus().equals("IN_PROGRESS") && status.equals("NEW")) {
-                    System.out.println("Нельзя менять IN_PROGRESS на NEW");
-                } else if (task.getStatus().equals("DONE") && status.equals("NEW")) {
-                    System.out.println("Нельзя менять DONE на NEW");
-                } else {
-                    System.out.println("Статус обновлен ");
-                    task.setStatus(status);
-
-                }
                 Subtask subtask = taskManager.getSubtaskById(id);
-                for (Epic epic1 : taskManager.getEpic()) {
-                if (subtask == null) {
-                    System.out.println("Id не найден!");
-                } else {
-                for (Subtask sub : epic1.getSubtasks()) {
-                    if (sub.getStatus().equals("NEW") && sub.getStatus().isEmpty()) {
-                        epic1.setStatus("NEW");
-                    } else if (sub.getStatus().equals("DONE")) {
-                        epic1.setStatus("DONE");
-                    } else {
-                        epic1.setStatus("IN_PROGRESS");
-                    }
+                if (subtask != null) {
+                    System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
+                    String status = scanner.nextLine();
+                    subtask.setStatus(status);
+
+                    subtask.getEpic().refreshStatus();
+
+                    continue;
                 }
+                System.out.println("Задачи с таким идентификатором не найдена");
+            } else if (operation == 0) {
+                break;
             }
         }
-    } else if(operation ==0)
-
-    {
-        break;
     }
 }
-}
-        }
 
 
 //  } else if (operation == 4) {

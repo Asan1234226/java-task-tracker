@@ -11,4 +11,11 @@ public class Epic extends Task {
     public ArrayList<Subtask> getSubtasks() {
         return subtasks;
     }
+
+    public void refreshStatus() {
+        // обновление статуса эпика, на основе статусов подзадач
+        for (Subtask subtask : subtasks) {
+
+        }
+    }
 }
