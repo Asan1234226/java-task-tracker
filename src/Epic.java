@@ -14,8 +14,22 @@ public class Epic extends Task {
 
     public void refreshStatus() {
         // обновление статуса эпика, на основе статусов подзадач
-        for (Subtask subtask : subtasks) {
+        // - если subtasks пустой — NEW
+        // - если все сабтаски имеют статус NEW  — NEW
+        // - если все сабтаски имеют статус DONE — DONE
+        // - в противном случае - IN_PROGRESS
+        boolean allNew = true;
+        boolean allDone = true;
 
+        //
+
+
+        if (allNew == false && allDone == false) {
+            setStatus("IN_PROGRESS");
+        } else if (allNew == true) {
+            setStatus("NEW");
+        } else if (allDone == true) {
+            setStatus("DONE");
         }
     }
 }
