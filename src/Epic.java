@@ -21,9 +21,14 @@ public class Epic extends Task {
         boolean allNew = true;
         boolean allDone = true;
 
-        //
-
-
+        for (Subtask subtask : subtasks) {
+            if (!subtask.getStatus().equals("NEW")) {
+                allNew = false;
+            }
+            if (!subtask.getStatus().equals("DONE")) {
+                allDone = false;
+            }
+        }
         if (allNew == false && allDone == false) {
             setStatus("IN_PROGRESS");
         } else if (allNew == true) {
@@ -33,3 +38,4 @@ public class Epic extends Task {
         }
     }
 }
+
