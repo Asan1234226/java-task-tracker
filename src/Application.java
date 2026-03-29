@@ -57,7 +57,7 @@ public class Application {
                 } else {
                     Subtask subtask = new Subtask(name, description, epic);
                     taskManager.createSubtask(subtask);
-                    System.out.println(id + " " + epic.getTitle() + " " + epic.getStatus() + " (" + "epicId=" + id + ")");
+                    System.out.println(id + " " + subtask.getTitle() + " " + subtask.getStatus() + " (" + "epicId=" + id + ")");
                 }
             } else if (operation == 4) {
                 ArrayList<Task> tasks = taskManager.getTasks();
@@ -84,17 +84,17 @@ public class Application {
                 Task task = taskManager.getTaskById(id);
                 if (task != null) {
                     System.out.println(task.getId() + " " + task.getTitle() + " " + task.getStatus());
-                    return;
+                    continue;
                 }
                 Epic epic = taskManager.getEpicById(id);
                 if (epic != null) {
                     System.out.println(epic.getId() + " " + epic.getTitle() + " " + epic.getStatus());
-                    return;
+                    continue;
                 }
                 Subtask subtask = taskManager.getSubtaskById(id);
                 if (subtask != null) {
                     System.out.println(subtask.getId() + " " + subtask.getTitle() + " " + subtask.getStatus());
-                    return;
+                    continue;
                 } else {
                     System.out.println("Id не найден");
                 }
@@ -116,15 +116,15 @@ public class Application {
 
                 if (taskManager.removeTaskById(id)) {
                     System.out.println("Задача удалена");
-                    return;
+                     continue;
                 }
                 if (taskManager.removeEpicById(id)) {
                     System.out.println("Задача удалена");
-                    return;
+                    continue;
                 }
                 if (taskManager.removeSubtaskById(id)) {
                     System.out.println("Задача удалена");
-                    return;
+                    continue;
                 } else {
                     System.out.println("Id не найден");
                 }
