@@ -1,11 +1,13 @@
 import java.util.ArrayList;
 
-public class TaskManager {
+public class TaskManager{
     private ArrayList<Task> tasks = new ArrayList<>();
     private ArrayList<Epic> epics = new ArrayList<>();
     private ArrayList<Subtask> subtasks = new ArrayList<>();
-
     private int nextId = 1;
+
+
+
 
 
     // TODO
@@ -53,7 +55,6 @@ public class TaskManager {
     public ArrayList<Subtask> getSubtask() {
         return subtasks;
     }
-
     public Subtask getSubtaskById(int id) {
         for (Subtask subtask : subtasks) {
             if (subtask.getId() == id) {
@@ -65,9 +66,13 @@ public class TaskManager {
 
     public boolean removeSubtaskById(int id) {
         for (int i = 0; i < subtasks.size(); i++) {
+            Subtask subtask = subtasks.get(i);
             if (subtasks.get(i).getId() == id) {
                 subtasks.remove(i);
-                return true;
+                Epic epic = subtask.getEpic();
+                epic.getSubtasks().remove(subtask);
+                epic.refreshStatus();
+            return true;
             }
         }
         return false;
@@ -105,8 +110,12 @@ public class TaskManager {
 
     public boolean removeEpicById(int id) {
         for (int i = 0; i < epics.size(); i++) {
+            Epic epic = epics.get(i);
             if (epics.get(i).getId() == id) {
                 epics.remove(i);
+                for (Subtask subtask : epic.getSubtasks()) {
+                    subtasks.remove(subtask);
+                }
                 return true;
             }
         }
