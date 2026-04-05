@@ -144,7 +144,7 @@ public class Application {
                     if (task != null) {
                         System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
                         String status = scanner.nextLine();
-                        if (!status.equals("NEW") && !status.equals("IN_PROGRESS") && !status.equals("DONE")) {
+                        if (!checkIfStatusCorrect(status)) {
                             System.out.println("Такой статус не найдена");
                         } else {
                             task.setStatus(status);
@@ -156,7 +156,7 @@ public class Application {
                     if (subtask != null) {
                         System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
                         String status = scanner.nextLine();
-                        if (!status.equals("NEW") && !status.equals("IN_PROGRESS") && !status.equals("DONE")) {
+                        if (!checkIfStatusCorrect(status)) {
                             System.out.println("Такой статус не найдена");
                         } else {
                             subtask.setStatus(status);
@@ -170,6 +170,12 @@ public class Application {
                 break;
             }
         }
+    }
+
+    public static boolean checkIfStatusCorrect(String status) {
+        return status.equals("NEW")
+                || status.equals("IN_PROGRESS")
+                || status.equals("DONE");
     }
 }
 
