@@ -19,6 +19,9 @@ public class Application {
             int operation = Integer.parseInt(scanner.nextLine());
 
 
+            if (operation >= 0 && operation <= 9) {
+
+            }
             if (operation == 1) {
                 System.out.println("Введите название задачи:");
                 String name = scanner.nextLine();
@@ -57,7 +60,8 @@ public class Application {
                 } else {
                     Subtask subtask = new Subtask(name, description, epic);
                     taskManager.createSubtask(subtask);
-                    System.out.println(id + " " + subtask.getTitle() + " " + subtask.getStatus() + " (" + "epicId=" + id + ")");
+                    subtask.getEpic().refreshStatus();
+                    System.out.println(subtask.getId() + " " + subtask.getTitle() + " " + subtask.getStatus() + " (" + "epicId=" + subtask.getId() + ")");
                 }
             } else if (operation == 4) {
                 ArrayList<Task> tasks = taskManager.getTasks();
@@ -116,7 +120,7 @@ public class Application {
 
                 if (taskManager.removeTaskById(id)) {
                     System.out.println("Задача удалена");
-                     continue;
+                    continue;
                 }
                 if (taskManager.removeEpicById(id)) {
                     System.out.println("Задача удалена");
@@ -128,30 +132,40 @@ public class Application {
                 } else {
                     System.out.println("Id не найден");
                 }
-
             } else if (operation == 8) {
                 System.out.println("Введите id:");
                 int id = Integer.parseInt(scanner.nextLine());
-
-                Task task = taskManager.getTaskById(id);
-                if (task != null) {
-                    System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
-                    String status = scanner.nextLine();
-                    task.setStatus(status);
-                    continue;
+                Epic epic = taskManager.getEpicById(id);
+                if (epic != null) {
+                    System.out.println("Нельзя обновть статус эпика");
+                } else {
+                    // проверка на эпик если ищем эпик то должен вывести нельзя обновить статус эпика
+                    Task task = taskManager.getTaskById(id);
+                    if (task != null) {
+                        System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
+                        String status = scanner.nextLine();
+                        if (!status.equals("NEW") && !status.equals("IN_PROGRESS") && !status.equals("DONE")) {
+                            System.out.println("Такой статус не найдена");
+                        } else {
+                            task.setStatus(status);
+                            continue;
+                            // проверка на эти
+                        }
+                    }
+                    Subtask subtask = taskManager.getSubtaskById(id);
+                    if (subtask != null) {
+                        System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
+                        String status = scanner.nextLine();
+                        if (!status.equals("NEW") && !status.equals("IN_PROGRESS") && !status.equals("DONE")) {
+                            System.out.println("Такой статус не найдена");
+                        } else {
+                            subtask.setStatus(status);
+                            subtask.getEpic().refreshStatus();
+                            continue;
+                        }
+                    }
+                    System.out.println("Задачи с таким идентификатором не найдена");
                 }
-
-                Subtask subtask = taskManager.getSubtaskById(id);
-                if (subtask != null) {
-                    System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
-                    String status = scanner.nextLine();
-                    subtask.setStatus(status);
-
-                    subtask.getEpic().refreshStatus();
-
-                    continue;
-                }
-                System.out.println("Задачи с таким идентификатором не найдена");
             } else if (operation == 0) {
                 break;
             }
