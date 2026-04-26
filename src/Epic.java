@@ -22,19 +22,19 @@ public class Epic extends Task {
         boolean allDone = true;
 
         for (Subtask subtask : subtasks) {
-            if (!subtask.getStatus().equals("NEW")) {
+            if (subtask.getStatus() != Tasktatus.NEW) {
                 allNew = false;
             }
-            if (!subtask.getStatus().equals("DONE")) {
+            if (subtask.getStatus() != Tasktatus.DONE) {
                 allDone = false;
             }
         }
         if (allNew == false && allDone == false) {
-            setStatus("IN_PROGRESS");
+            setStatus(Tasktatus.IN_PROGRESS);
         } else if (allNew == true) {
-            setStatus("NEW");
+            setStatus(Tasktatus.NEW);
         } else if (allDone == true) {
-            setStatus("DONE");
+            setStatus(Tasktatus.DONE);
         }
     }
 }

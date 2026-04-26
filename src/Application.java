@@ -19,9 +19,6 @@ public class Application {
             int operation = Integer.parseInt(scanner.nextLine());
 
 
-            if (operation >= 0 && operation <= 9) {
-
-            }
             if (operation == 1) {
                 System.out.println("Введите название задачи:");
                 String name = scanner.nextLine();
@@ -104,7 +101,7 @@ public class Application {
                 }
             } else if (operation == 6) {
                 System.out.println("Введите статус задачи:");
-                String status = scanner.nextLine();
+                Tasktatus status = Tasktatus.valueOf(scanner.nextLine());
                 for (Task task : taskManager.getTasksByStatus(status)) {
                     System.out.println(task.getId() + " " + task.getTitle() + " " + status);
                 }
@@ -143,39 +140,26 @@ public class Application {
                     Task task = taskManager.getTaskById(id);
                     if (task != null) {
                         System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
-                        String status = scanner.nextLine();
-                        if (!checkIfStatusCorrect(status)) {
-                            System.out.println("Такой статус не найдена");
-                        } else {
-                            task.setStatus(status);
-                            continue;
-                            // проверка на эти
-                        }
+                        Tasktatus status = Tasktatus.valueOf(scanner.nextLine());
+                        task.setStatus(status);
+                        continue;
+                        // проверка на эти
                     }
-                    Subtask subtask = taskManager.getSubtaskById(id);
-                    if (subtask != null) {
-                        System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
-                        String status = scanner.nextLine();
-                        if (!checkIfStatusCorrect(status)) {
-                            System.out.println("Такой статус не найдена");
-                        } else {
-                            subtask.setStatus(status);
-                            subtask.getEpic().refreshStatus();
-                            continue;
-                        }
-                    }
-                    System.out.println("Задачи с таким идентификатором не найдена");
                 }
+                Subtask subtask = taskManager.getSubtaskById(id);
+                if (subtask != null) {
+                    System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
+                    Tasktatus status = Tasktatus.valueOf(scanner.nextLine());
+                    subtask.setStatus(status);
+                    subtask.getEpic().refreshStatus();
+                    continue;
+                }
+                System.out.println("Задачи с таким идентификатором не найдена");
+
             } else if (operation == 0) {
                 break;
             }
         }
-    }
-
-    public static boolean checkIfStatusCorrect(String status) {
-        return status.equals("NEW")
-                || status.equals("IN_PROGRESS")
-                || status.equals("DONE");
     }
 }
 

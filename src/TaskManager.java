@@ -8,8 +8,6 @@ public class TaskManager{
 
 
 
-
-
     // TODO
     // - createEpic, getEpicById, remove...
     // - createSubtask, getSubtaskById, remove...
@@ -78,10 +76,10 @@ public class TaskManager{
         return false;
     }
 
-    public ArrayList<Subtask> getSubtaskByStatus(String status) {
+    public ArrayList<Subtask> getSubtaskByStatus(Tasktatus status) {
         ArrayList<Subtask> list = new ArrayList<>();
         for (Subtask subtask : subtasks) {
-            if (subtask.getStatus().equals(status)) {
+            if (subtask.getStatus() == status) {
                 list.add(subtask);
             }
         }
@@ -122,20 +120,20 @@ public class TaskManager{
         return false;
     }
 
-    public ArrayList<Epic> getEpicByStatus(String status) {
+    public ArrayList<Epic> getEpicByStatus(Tasktatus status) {
         ArrayList<Epic> list = new ArrayList<>();
         for (Epic epic : epics) {
-            if (epic.getStatus().equals(status)) {
+            if (epic.getStatus() == status) {
                 list.add(epic);
             }
         }
         return list;
     }
 
-    public ArrayList<Task> getTasksByStatus(String status) {
+    public ArrayList<Task> getTasksByStatus(Tasktatus status) {
         ArrayList<Task> list = new ArrayList<>();
         for (Task task : tasks) {
-            if (task.getStatus().equals(status)) {
+            if (task.getStatus() == status) {
                 list.add(task);
             }
         }

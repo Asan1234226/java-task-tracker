@@ -2,10 +2,10 @@ public class Task {
     private int id;
     private String title;
     private String description;
-    private String status;
+    private Tasktatus status;
 
     public Task(String newTitle, String newDescription) {
-        status = "NEW";
+        status = Tasktatus.NEW;
         title = newTitle;
         description = newDescription;
     }
@@ -34,11 +34,11 @@ public class Task {
         description = newDescription;
     }
 
-    public String getStatus() {
+    public Tasktatus getStatus() {
         return status;
     }
 
-    public void setStatus(String newStatus) {
+    public void setStatus(Tasktatus newStatus) {
         status = newStatus;
     }
 }
