@@ -1,8 +1,9 @@
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Application {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws  Exception {
         Scanner scanner = new Scanner(System.in);
         TaskManager taskManager = new TaskManager();
         while (true) {
@@ -22,7 +23,6 @@ public class Application {
             if (operation == 1) {
                 System.out.println("Введите название задачи:");
                 String name = scanner.nextLine();
-
                 System.out.println("Введите описание задачи:");
                 String description = scanner.nextLine();
                 Task task = new Task(name, description);
