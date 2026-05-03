@@ -13,30 +13,26 @@ public class Application {
         Path path = Path.of("tasks.txt");
         List<String> list = Files.readAllLines(path);
         list.remove(0);
-        int Id = 0;
-        String title = "";
-        String description1 = "";
-        Tasktatus Status;
         for (String s : list) {
             String[] split = s.split(",");
-            String id = split[0];
-            String title1 = split[1];
-            String description = split[2];
-            String status = split[3];
-            if (id.equals("id")) {
-                Id = Integer.parseInt(id);
-            } else if (title1.equals("title")) {
-                title = title1;
-            } else if (description.equals("description")) {
-                description1 = description;
-            } else if (status.equals("status")) {
-                Status = Tasktatus.NEW;
+            int id = Integer.parseInt(split[0]);
+            String type = split[1];
+            String title = split[2];
+            String description = split[3];
+            Tasktatus status = Tasktatus.valueOf(split[4]);
+            if(type.equals("TASK")) {
+                Task task1 = new Task(id, title, description, status);
+                taskManager.getTasks().add(task1);
+            } else if (type.equals("EPIC")) {
+                Epic epic = new Epic(id, title, description, status);
+                taskManager.getEpic().add(epic);
+            } else if (type.equals("SUBTASK")) {
+                Subtask subtask = new Subtask(id, title, description, status);
+                taskManager.getSubtask().add(subtask);
             }
-            Task task1 = new Task(Id, title, description1, Tasktatus.NEW);
-            taskManager.getTasks().add(task1);
         }
         while (true) {
-//                System.out.println("Загруженые фа/йлы: " + list);
+//           System.out.println("Загруженые фа/йлы: " + list);
             System.out.println("1. Создать задачу");
             System.out.println("2. Создать эпик");
             System.out.println("3. Создать подзадачу");
@@ -188,7 +184,7 @@ public class Application {
 
             } else if (operation == 0) {
                 FileWriter writer = new FileWriter("tasks.txt");
-                writer.write("id" + "," + "title" + "," + "description" + "," + "status,epicId" + "\n");
+                writer.write("id,type,title,description,status,epicId\n");
                 for (Task task : taskManager.getTasks()) {
                     writer.write(task.getId() + "," + "TASK" + "," + task.getTitle() + "," + task.getDescription() + "," + task.getStatus() + "\n");
                 }

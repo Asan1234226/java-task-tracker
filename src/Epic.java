@@ -3,8 +3,12 @@ import java.util.ArrayList;
 public class Epic extends Task {
     private ArrayList<Subtask> subtasks;
 
-    Epic(String newTitle, String newDescription)  throws  Exception{
+    Epic(String newTitle, String newDescription){
         super(newTitle, newDescription);
+        subtasks = new ArrayList<>();
+    }
+    Epic(int newId,String newTitle, String newDescription,  Tasktatus newStatus)  {
+        super(newId,newTitle,newDescription,newStatus);
         subtasks = new ArrayList<>();
     }
 
