@@ -7,17 +7,19 @@ public class Task {
     private String description;
     private Tasktatus status;
 
-    public Task(String newTitle, String newDescription) throws Exception {
+    public Task(String newTitle, String newDescription)  {
         status = Tasktatus.NEW;
         title = newTitle;
         description = newDescription;
-        FileWriter writer = new FileWriter("tasks.txt");
-        writer.write("id" + "," + "title" + "," + "description" + "," + "status" + "\n");
-        for (int i = 0; i < 1; i++) {
-            writer.write(i + 1 + "," + getTitle() + "," + getDescription() + "," + getStatus() + "\n");
-        }
-        writer.close();
     }
+
+    public Task(int newId,String newTitle, String newDescription,  Tasktatus newStatus)  {
+        status = newStatus;
+        title = newTitle;
+        description = newDescription;
+        id = newId;
+    }
+
 
     public int getId() {
         return id;

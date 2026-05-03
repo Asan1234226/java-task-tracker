@@ -1,12 +1,42 @@
+import java.io.File;
 import java.io.FileWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Application {
-    public static void main(String[] args) throws  Exception {
-        Scanner scanner = new Scanner(System.in);
+    public static void main(String[] args) throws Exception {
         TaskManager taskManager = new TaskManager();
+        Scanner scanner = new Scanner(System.in);
+        Path path = Path.of("tasks.txt");
+        List<String> list = Files.readAllLines(path);
+        list.remove(0);
+        int Id = 0;
+        String title = "";
+        String description1 = "";
+        Tasktatus Status;
+        for (String s : list) {
+            String[] split = s.split(",");
+            String id = split[0];
+            String title1 = split[1];
+            String description = split[2];
+            String status = split[3];
+            if (id.equals("id")) {
+                Id = Integer.parseInt(id);
+            } else if (title1.equals("title")) {
+                title = title1;
+            } else if (description.equals("description")) {
+                description1 = description;
+            } else if (status.equals("status")) {
+                Status = Tasktatus.NEW;
+            }
+            Task task1 = new Task(Id, title, description1, Tasktatus.NEW);
+            taskManager.getTasks().add(task1);
+        }
         while (true) {
+//                System.out.println("Загруженые фа/йлы: " + list);
             System.out.println("1. Создать задачу");
             System.out.println("2. Создать эпик");
             System.out.println("3. Создать подзадачу");
@@ -18,9 +48,8 @@ public class Application {
             System.out.println("0. Выход");
             System.out.println("Выберите действие:");
             int operation = Integer.parseInt(scanner.nextLine());
-
-
             if (operation == 1) {
+                System.out.println(list);
                 System.out.println("Введите название задачи:");
                 String name = scanner.nextLine();
                 System.out.println("Введите описание задачи:");
@@ -108,6 +137,7 @@ public class Application {
                 for (Epic epic : taskManager.getEpicByStatus(status)) {
                     System.out.println(epic.getId() + " " + epic.getTitle() + " " + epic.getStatus());
                 }
+
                 for (Subtask subtask : taskManager.getSubtaskByStatus(status)) {
                     System.out.println(subtask.getId() + " " + subtask.getTitle() + " " + subtask.getStatus());
                 }
@@ -157,6 +187,18 @@ public class Application {
                 System.out.println("Задачи с таким идентификатором не найдена");
 
             } else if (operation == 0) {
+                FileWriter writer = new FileWriter("tasks.txt");
+                writer.write("id" + "," + "title" + "," + "description" + "," + "status,epicId" + "\n");
+                for (Task task : taskManager.getTasks()) {
+                    writer.write(task.getId() + "," + "TASK" + "," + task.getTitle() + "," + task.getDescription() + "," + task.getStatus() + "\n");
+                }
+                for (Epic epic : taskManager.getEpic()) {
+                    writer.write(epic.getId() + "," + "EPIC" + "," + epic.getTitle() + "," + epic.getDescription() + "," + epic.getStatus() + "\n");
+                }
+                for (Subtask subtask : taskManager.getSubtask()) {
+                    writer.write(subtask.getId() + ",SUBTASK," + subtask.getTitle() + "," + subtask.getDescription() + "," + subtask.getStatus() + "," + subtask.getEpic().getId() + "\n");
+                }
+                writer.close();
                 break;
             }
         }
@@ -188,10 +230,3 @@ public class Application {
 
 
 //                                System.out.println(subtask.getId() + " [SUBTASK] " + " " + subtask.getTitle() + " " + subtask.getStatus());
-
-
-
-
-
-
-
