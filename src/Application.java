@@ -1,3 +1,4 @@
+import java.awt.image.SinglePixelPackedSampleModel;
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
@@ -5,34 +6,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 public class Application {
     public static void main(String[] args) throws Exception {
         TaskManager taskManager = new TaskManager();
         Scanner scanner = new Scanner(System.in);
-        Path path = Path.of("tasks.txt");
-        List<String> list = Files.readAllLines(path);
-        list.remove(0);
-        for (String s : list) {
-            String[] split = s.split(",");
-            int id = Integer.parseInt(split[0]);
-            String type = split[1];
-            String title = split[2];
-            String description = split[3];
-            Tasktatus status = Tasktatus.valueOf(split[4]);
-            if(type.equals("TASK")) {
-                Task task1 = new Task(id, title, description, status);
-                taskManager.getTasks().add(task1);
-            } else if (type.equals("EPIC")) {
-                Epic epic = new Epic(id, title, description, status);
-                taskManager.getEpic().add(epic);
-            } else if (type.equals("SUBTASK")) {
-                Subtask subtask = new Subtask(id, title, description, status);
-                taskManager.getSubtask().add(subtask);
-            }
-        }
+        loadFromFile(taskManager);
         while (true) {
-//           System.out.println("Загруженые фа/йлы: " + list);
             System.out.println("1. Создать задачу");
             System.out.println("2. Создать эпик");
             System.out.println("3. Создать подзадачу");
@@ -45,7 +24,6 @@ public class Application {
             System.out.println("Выберите действие:");
             int operation = Integer.parseInt(scanner.nextLine());
             if (operation == 1) {
-                System.out.println(list);
                 System.out.println("Введите название задачи:");
                 String name = scanner.nextLine();
                 System.out.println("Введите описание задачи:");
@@ -63,7 +41,6 @@ public class Application {
                 String description = scanner.nextLine();
                 Epic epic1 = new Epic(epic, description);
                 taskManager.createEpic(epic1);
-
                 System.out.println("Задача создана: " + epic1.getId() + " " + epic1.getTitle() + " " + epic1.getStatus());
 
             } else if (operation == 3) {
@@ -102,7 +79,6 @@ public class Application {
                         }
                     }
                 }
-
             } else if (operation == 5) {
                 System.out.println("Введите id задачи:");
                 int id = Integer.parseInt(scanner.nextLine());
@@ -186,10 +162,10 @@ public class Application {
                 FileWriter writer = new FileWriter("tasks.txt");
                 writer.write("id,type,title,description,status,epicId\n");
                 for (Task task : taskManager.getTasks()) {
-                    writer.write(task.getId() + "," + "TASK" + "," + task.getTitle() + "," + task.getDescription() + "," + task.getStatus() + "\n");
+                    writer.write(task.getId() + ",TASK," + task.getTitle() + "," + task.getDescription() + "," + task.getStatus() + "\n");
                 }
                 for (Epic epic : taskManager.getEpic()) {
-                    writer.write(epic.getId() + "," + "EPIC" + "," + epic.getTitle() + "," + epic.getDescription() + "," + epic.getStatus() + "\n");
+                    writer.write(epic.getId() + ",EPIC," + epic.getTitle() + "," + epic.getDescription() + "," + epic.getStatus() + "\n");
                 }
                 for (Subtask subtask : taskManager.getSubtask()) {
                     writer.write(subtask.getId() + ",SUBTASK," + subtask.getTitle() + "," + subtask.getDescription() + "," + subtask.getStatus() + "," + subtask.getEpic().getId() + "\n");
@@ -199,30 +175,31 @@ public class Application {
             }
         }
     }
+    public static void loadFromFile(TaskManager taskManager) throws Exception {
+        Path path = Path.of("tasks.txt");
+        List<String> list = Files.readAllLines(path);
+        list.remove(0);
+        for (String s : list) {
+            String[] split = s.split(",");
+            int id = Integer.parseInt(split[0]);
+            String type = split[1];
+            String title = split[2];
+            String description = split[3];
+            Tasktatus status = Tasktatus.valueOf(split[4]);
+
+            if (type.equals("TASK")) {
+                Task task1 = new Task(id, title, type, description, status);
+                taskManager.getTasks().add(task1);
+            } else if (type.equals("EPIC")) {
+                Subtask subtask = taskManager.getSubtaskByType(type);
+                Epic epic = new Epic(id, title, type, description, status, subtask);
+                taskManager.getEpic().add(epic);
+            } else if (type.equals("SUBTASK")) {
+                int epicId = Integer.parseInt(split[5]);
+                Epic epic = taskManager.getEpicById(epicId);
+                Subtask subtask = new Subtask(id, title, type, description, status, epic);
+                taskManager.getSubtask().add(subtask);
+            }
+        }
+    }
 }
-
-
-//  } else if (operation == 4) {
-//                ArrayList<Task> tasks = taskManager.getTasks();
-//                ArrayList<Epic> epic = taskManager.getEpic();
-//                ArrayList<Subtask> subtasks = taskManager.getSubtask();
-//                if (tasks.isEmpty() && epic.isEmpty() && subtasks.isEmpty()) {
-//                    System.out.println("Список пуст");
-//                } else {
-//                    for (Task task : tasks) {
-//                        System.out.println(task.getId() + " [TASK] " + " " + task.getTitle() + " " + task.getStatus());
-//                    }
-//                    for (Epic epic1 : epic) {
-//                        System.out.println(epic1.getId() + " [EPIC] " + " " + epic1.getTitle() + " " + epic1.getStatus());
-//                        if (epic1.getSubtasks().contains(subtasks)) {
-//                            for (Subtask subtask : subtasks) {
-//
-//
-//                                System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
-//                String status1 = scanner.nextLine();
-
-//if (!status1.equals("NEW") && !status1.equals("IN_PROGRESS") && !status1.equals("DONE")) {
-//     System.out.println("Некоректный статус");
-
-
-//                                System.out.println(subtask.getId() + " [SUBTASK] " + " " + subtask.getTitle() + " " + subtask.getStatus());

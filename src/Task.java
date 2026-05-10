@@ -6,6 +6,7 @@ public class Task {
     private String title;
     private String description;
     private Tasktatus status;
+    private  String type;
 
     public Task(String newTitle, String newDescription)  {
         status = Tasktatus.NEW;
@@ -13,9 +14,10 @@ public class Task {
         description = newDescription;
     }
 
-    public Task(int newId,String newTitle, String newDescription,  Tasktatus newStatus)  {
+    public Task(int newId,String newTitle, String newType, String newDescription,  Tasktatus newStatus)  {
         status = newStatus;
         title = newTitle;
+        type = newType;
         description = newDescription;
         id = newId;
     }
@@ -35,6 +37,12 @@ public class Task {
 
     public void setTitle(String newTitle) {
         title = newTitle;
+    }
+    public String getType() {
+        return type;
+    }
+    public  void  setType(String newType) {
+        type = newType;
     }
 
     public String getDescription() {

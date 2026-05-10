@@ -7,8 +7,10 @@ public class Subtask extends Task {
         super(newTitle, newDescription);
         epic = newEpic;
     }
-      Subtask(int newId,String newTitle, String newDescription,  Tasktatus newStatus)  {
-        super(newId,newTitle,newDescription,newStatus);
+
+    Subtask(int newId, String newTitle,String newType, String newDescription, Tasktatus newStatus, Epic newEpic) {
+        super(newId, newTitle, newType, newDescription, newStatus);
+        epic = newEpic;
     }
 
     public Epic getEpic() {

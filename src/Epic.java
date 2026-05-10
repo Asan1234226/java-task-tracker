@@ -7,15 +7,14 @@ public class Epic extends Task {
         super(newTitle, newDescription);
         subtasks = new ArrayList<>();
     }
-    Epic(int newId,String newTitle, String newDescription,  Tasktatus newStatus)  {
-        super(newId,newTitle,newDescription,newStatus);
+    Epic(int newId,String newTitle,String newType, String newDescription, Tasktatus newStatus, Subtask newSubtask)  {
+        super(newId,newTitle,newType, newDescription,newStatus);
         subtasks = new ArrayList<>();
     }
 
     public ArrayList<Subtask> getSubtasks() {
         return subtasks;
     }
-
     public void refreshStatus() {
         // обновление статуса эпика, на основе статусов подзадач
         // - если subtasks пустой — NEW
@@ -24,7 +23,6 @@ public class Epic extends Task {
         // - в противном случае - IN_PROGRESS
         boolean allNew = true;
         boolean allDone = true;
-
         for (Subtask subtask : subtasks) {
             if (subtask.getStatus() != Tasktatus.NEW) {
                 allNew = false;
