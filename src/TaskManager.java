@@ -39,6 +39,13 @@ public class TaskManager {
         }
         return false;
     }
+    public boolean getRemoveAllTasks() {
+        for (int i = 0; i < tasks.size(); i++) {
+            tasks.remove(i);
+            return true;
+        }
+        return false;
+    }
 
     public void createSubtask(Subtask subtask) {
         subtask.setId(nextId);
@@ -85,15 +92,19 @@ public class TaskManager {
         }
         return list;
     }
-    public  Subtask getSubtaskByType(String type) {
-        ArrayList<Subtask> list = new ArrayList<>();
-        for (Subtask subtask : subtasks) {
-            if (subtask.getType().equals("SUBTASK")) {
-                list.add(subtask);
-            }
+
+    public boolean getRemoveAllSubtask() {
+        for (int i = 0; i < subtasks.size(); i++) {
+            Subtask subtask = subtasks.get(i);
+            subtasks.remove(i);
+            Epic epic = subtask.getEpic();
+            epic.getSubtasks().remove(subtask);
+            epic.refreshStatus();
+            return true;
         }
-         return null;
+        return false;
     }
+
     // -----------------------------------------------------------------------------------------------------
     public void createEpic(Epic epic) {
         epic.setId(nextId);
@@ -136,6 +147,18 @@ public class TaskManager {
             }
         }
         return list;
+    }
+
+    public boolean getRemoveAllEpic() {
+        for (int i = 0; i < epics.size(); i++) {
+            Epic epic = epics.get(i);
+            epics.remove(i);
+            for (Subtask subtask1 : epic.getSubtasks()) {
+                subtasks.remove(subtask1);
+                return true;
+            }
+        }
+        return false;
     }
 
     public ArrayList<Task> getTasksByStatus(Tasktatus status) {
