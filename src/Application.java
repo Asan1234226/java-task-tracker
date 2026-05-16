@@ -63,8 +63,8 @@ public class Application {
 
             Task task = new Task(name, description);
             taskManager.createTask(task);
-            System.out.println("Задача создана: " + task.getId() + " " + task.getTitle() + " " + task.getStatus());
             saveTasksToFile(taskManager);
+            System.out.println("Задача создана: " + task.getId() + " " + task.getTitle() + " " + task.getStatus());
         } else if (taskNum == 2) {
             System.out.println("Введите эпик задачу:");
             String epic = scanner.nextLine();
@@ -72,8 +72,8 @@ public class Application {
             String description = scanner.nextLine();
             Epic epic1 = new Epic(epic, description);
             taskManager.createEpic(epic1);
-            System.out.println("Задача создана: " + epic1.getId() + " " + epic1.getTitle() + " " + epic1.getStatus());
             saveTasksToFile(taskManager);
+            System.out.println("Задача создана: " + epic1.getId() + " " + epic1.getTitle() + " " + epic1.getStatus());
         } else if (taskNum == 3) {
             System.out.println("Введите название подзадачи:");
             String name = scanner.nextLine();
@@ -91,8 +91,8 @@ public class Application {
                 Subtask subtask = new Subtask(name, description, epic);
                 taskManager.createSubtask(subtask);
                 subtask.getEpic().refreshStatus();
-                System.out.println(subtask.getId() + " " + subtask.getTitle() + " " + subtask.getStatus() + " (" + "epicId=" + subtask.getId() + ")");
                 saveTasksToFile(taskManager);
+                System.out.println(subtask.getId() + " " + subtask.getTitle() + " " + subtask.getStatus() + " (" + "epicId=" + subtask.getId() + ")");
             }
         }
     }
@@ -238,9 +238,13 @@ public class Application {
         Path path = Path.of("tasks.txt");
         List<String> list = Files.readAllLines(path);
         list.remove(0);
+        int maxId = 0;
         for (String s : list) {
             String[] split = s.split(",");
             int id = Integer.parseInt(split[0]);
+           if (id > maxId) {
+               maxId = id;
+           }
             String type = split[1];
             String title = split[2];
             String description = split[3];
@@ -260,5 +264,6 @@ public class Application {
                 epic.getSubtasks().add(subtask);
             }
         }
+        taskManager.setNextId(maxId+1);
     }
 }

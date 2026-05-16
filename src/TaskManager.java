@@ -11,6 +11,10 @@ public class TaskManager {
     // - createEpic, getEpicById, remove...
     // - createSubtask, getSubtaskById, remove...
 
+    public void setNextId(int newId) {
+        nextId = newId;
+    }
+
     public void createTask(Task task) {
         task.setId(nextId);
         nextId++;
@@ -39,10 +43,11 @@ public class TaskManager {
         }
         return false;
     }
+
     public void removeAllTasks() {
-       tasks.clear();
-       epics.clear();
-       subtasks.clear();
+        tasks.clear();
+        epics.clear();
+        subtasks.clear();
     }
 
     public void createSubtask(Subtask subtask) {
