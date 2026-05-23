@@ -29,6 +29,8 @@ public class Application {
                 updateTaskStatus(taskManager, scanner);
             } else if (operation == 7) {
                 removeAllTasks(taskManager);
+            } else if (operation == 8) {
+                history(taskManager);
             } else if (operation == 0) {
                 saveTasksToFile(taskManager);
                 break;
@@ -44,6 +46,7 @@ public class Application {
         System.out.println("5. Удалить задачу по id");
         System.out.println("6. Обновить статус задачи");
         System.out.println("7. Удалить все задачи");
+        System.out.println("8. История");
         System.out.println("0. Выход");
         System.out.println("Выберите действие:");
     }
@@ -116,6 +119,16 @@ public class Application {
         }
     }
 
+    public static void history(TaskManager taskManager) throws  Exception {
+        ArrayList<Task> tasks1 = taskManager.getHistory();
+        FileWriter writer = new FileWriter("history.txt");
+        for (Task task : tasks1) {
+            writer.write(task.getId() + "," + task.getTitle() + "," + task.getStatus() + "\n");
+            System.out.println(task.getId() + " " + task.getTitle() + " " + task.getStatus());
+        }
+        writer.close();
+    }
+
     public static void findTaskById(TaskManager taskManager, Scanner scanner) {
         System.out.println("Введите id задачи:");
         int id = Integer.parseInt(scanner.nextLine());
@@ -123,16 +136,19 @@ public class Application {
         Task task = taskManager.getTaskById(id);
         if (task != null) {
             System.out.println(task.getId() + " " + task.getTitle() + " " + task.getStatus());
+            taskManager.saveToHistory(task);
             return;
         }
         Epic epic = taskManager.getEpicById(id);
         if (epic != null) {
             System.out.println(epic.getId() + " " + epic.getTitle() + " " + epic.getStatus());
+            taskManager.saveToHistory(epic);
             return;
         }
         Subtask subtask = taskManager.getSubtaskById(id);
         if (subtask != null) {
             System.out.println(subtask.getId() + " " + subtask.getTitle() + " " + subtask.getStatus());
+            taskManager.saveToHistory(subtask);
             return;
         } else {
             System.out.println("Id не найден");
@@ -164,16 +180,19 @@ public class Application {
         if (taskManager.removeTaskById(id)) {
             list.remove(id);
             System.out.println("Задача удалена");
+            saveTasksToFile(taskManager);
             return;
         }
         if (taskManager.removeEpicById(id)) {
             list.remove(id);
             System.out.println("Задача удалена");
+            saveTasksToFile(taskManager);
             return;
         }
         if (taskManager.removeSubtaskById(id)) {
             list.remove(id);
             System.out.println("Задача удалена");
+            saveTasksToFile(taskManager);
             return;
         } else {
             System.out.println("Id не найден");
@@ -189,17 +208,14 @@ public class Application {
         } else {
             // проверка на эпик если ищем эпик то должен вывести нельзя обновить статус эпика
             Task task = taskManager.getTaskById(id);
-            FileWriter writer = new FileWriter("tasks.txt");
             if (task != null) {
                 System.out.println("Введите новый статус (NEW, IN_PROGRESS, DONE):");
                 Tasktatus status = Tasktatus.valueOf(scanner.nextLine());
                 task.setStatus(status);
-                writer.write(status + "");
-
+                saveTasksToFile(taskManager);
                 return;
                 // проверка на эти
             }
-            writer.close();
         }
         Subtask subtask = taskManager.getSubtaskById(id);
         if (subtask != null) {
@@ -213,10 +229,8 @@ public class Application {
     }
 
     public static void removeAllTasks(TaskManager taskManager) throws Exception {
-        Path path = Path.of("tasks.txt");
-        List<String> list = Files.readAllLines(path);
-        list.clear();
         taskManager.removeAllTasks();
+        saveTasksToFile(taskManager);
     }
 
     public static void saveTasksToFile(TaskManager taskManager) throws Exception {
@@ -242,9 +256,9 @@ public class Application {
         for (String s : list) {
             String[] split = s.split(",");
             int id = Integer.parseInt(split[0]);
-           if (id > maxId) {
-               maxId = id;
-           }
+            if (id > maxId) {
+                maxId = id;
+            }
             String type = split[1];
             String title = split[2];
             String description = split[3];
@@ -264,6 +278,6 @@ public class Application {
                 epic.getSubtasks().add(subtask);
             }
         }
-        taskManager.setNextId(maxId+1);
+        taskManager.setNextId(maxId + 1);
     }
 }

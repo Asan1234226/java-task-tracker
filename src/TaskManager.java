@@ -1,9 +1,13 @@
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TaskManager {
     private ArrayList<Task> tasks = new ArrayList<>();
     private ArrayList<Epic> epics = new ArrayList<>();
     private ArrayList<Subtask> subtasks = new ArrayList<>();
+    private ArrayList<Task> history = new ArrayList<>();
     private int nextId = 1;
 
 
@@ -33,22 +37,36 @@ public class TaskManager {
         }
         return null;
     }
+     public  ArrayList<Task> getHistory() {
+        return  history;
+     }
 
-    public boolean removeTaskById(int id) {
+    public void saveToHistory(Task task) {
+        history.remove(task);
+      history.addFirst(task);
+    }
+
+    public boolean removeTaskById(int id) throws Exception {
+        Path path = Path.of("tasks.txt");
+        List<String> list = Files.readAllLines(path);
         for (int i = 0; i < tasks.size(); i++) {
             if (tasks.get(i).getId() == id) {
                 tasks.remove(i);
+                list.remove(i);
                 return true;
             }
         }
         return false;
     }
 
+
     public void removeAllTasks() {
         tasks.clear();
         epics.clear();
         subtasks.clear();
     }
+
+//
 
     public void createSubtask(Subtask subtask) {
         subtask.setId(nextId);
