@@ -12,28 +12,7 @@ public class Application {
         TaskManager taskManager = new TaskManager();
         Scanner scanner = new Scanner(System.in);
         loadFromFile(taskManager);
-        Path path = Path.of("history.txt");
-        List<String> list = Files.readAllLines(path);
-        for (String s : list) {
-            //1
-            int s1 = Integer.parseInt(s);
-
-            Task task = taskManager.getTaskById(s1);
-            if (task != null) {
-                taskManager.getHistory().add(task);
-                continue;
-            }
-            Epic epic = taskManager.getEpicById(s1);
-            if (epic != null) {
-                taskManager.getHistory().add(epic);
-                continue;
-            }
-            Subtask subtask = taskManager.getSubtaskById(s1);
-            if (subtask != null) {
-                taskManager.getHistory().add(subtask);
-                continue;
-            }
-        }
+        loadHistory(taskManager);
         while (true) {
             printMenu(scanner);
             int operation = Integer.parseInt(scanner.nextLine());
@@ -278,7 +257,29 @@ public class Application {
         }
         writer.close();
     }
+    public static void loadHistory(TaskManager taskManager) throws Exception {
+        Path path = Path.of("history.txt");
+        List<String> list = Files.readAllLines(path);
+        for (String idStr : list) {
+            //1
+            int id = Integer.parseInt(idStr);
 
+            Task task = taskManager.getTaskById(id);
+            if (task != null) {
+                taskManager.getHistory().add(task);
+                continue;
+            }
+            Epic epic = taskManager.getEpicById(id);
+            if (epic != null) {
+                taskManager.getHistory().add(epic);
+                continue;
+            }
+            Subtask subtask = taskManager.getSubtaskById(id);
+            if (subtask != null) {
+                taskManager.getHistory().add(subtask);
+            }
+        }
+    }
     public static void loadFromFile(TaskManager taskManager) throws Exception {
         Path path = Path.of("tasks.txt");
         List<String> list = Files.readAllLines(path);
