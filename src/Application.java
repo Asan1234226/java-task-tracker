@@ -12,6 +12,28 @@ public class Application {
         TaskManager taskManager = new TaskManager();
         Scanner scanner = new Scanner(System.in);
         loadFromFile(taskManager);
+        Path path = Path.of("history.txt");
+        List<String> list = Files.readAllLines(path);
+        for (String s : list) {
+            //1
+            int s1 = Integer.parseInt(s);
+
+            Task task = taskManager.getTaskById(s1);
+            if (task != null) {
+                taskManager.getHistory().add(task);
+                continue;
+            }
+            Epic epic = taskManager.getEpicById(s1);
+            if (epic != null) {
+                taskManager.getHistory().add(epic);
+                continue;
+            }
+            Subtask subtask = taskManager.getSubtaskById(s1);
+            if (subtask != null) {
+                taskManager.getHistory().add(subtask);
+                continue;
+            }
+        }
         while (true) {
             printMenu(scanner);
             int operation = Integer.parseInt(scanner.nextLine());
@@ -120,19 +142,13 @@ public class Application {
     }
 
     public static void history(TaskManager taskManager) throws Exception {
-        Path path = Path.of("history.txt");
-        List<String> list = Files.readAllLines(path);
-        for (int i = 0; i < list.size(); i++) {
-            System.out.println(list.get(i));
-            ArrayList<Task> tasks1 = taskManager.getHistory();
-            for (Task task : tasks1) {
-                System.out.println(task.getId() + " " + task.getTitle() + " " + task.getStatus());
-            }
+        ArrayList<Task> tasks1 = taskManager.getHistory();
+        for (Task task : tasks1) {
+            System.out.println(task.getId() + " " + task.getTitle() + " " + task.getStatus());
         }
     }
 
     public static void findTaskById(TaskManager taskManager, Scanner scanner) throws Exception {
-
         System.out.println("Введите id задачи:");
         int id = Integer.parseInt(scanner.nextLine());
 
