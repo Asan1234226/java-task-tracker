@@ -119,17 +119,20 @@ public class Application {
         }
     }
 
-    public static void history(TaskManager taskManager) throws  Exception {
-        ArrayList<Task> tasks1 = taskManager.getHistory();
-        FileWriter writer = new FileWriter("history.txt");
-        for (Task task : tasks1) {
-            writer.write(task.getId() + "," + task.getTitle() + "," + task.getStatus() + "\n");
-            System.out.println(task.getId() + " " + task.getTitle() + " " + task.getStatus());
+    public static void history(TaskManager taskManager) throws Exception {
+        Path path = Path.of("history.txt");
+        List<String> list = Files.readAllLines(path);
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(list.get(i));
+            ArrayList<Task> tasks1 = taskManager.getHistory();
+            for (Task task : tasks1) {
+                System.out.println(task.getId() + " " + task.getTitle() + " " + task.getStatus());
+            }
         }
-        writer.close();
     }
 
-    public static void findTaskById(TaskManager taskManager, Scanner scanner) {
+    public static void findTaskById(TaskManager taskManager, Scanner scanner) throws Exception {
+
         System.out.println("Введите id задачи:");
         int id = Integer.parseInt(scanner.nextLine());
 
@@ -137,18 +140,21 @@ public class Application {
         if (task != null) {
             System.out.println(task.getId() + " " + task.getTitle() + " " + task.getStatus());
             taskManager.saveToHistory(task);
+            saveHistoryToFile(taskManager);
             return;
         }
         Epic epic = taskManager.getEpicById(id);
         if (epic != null) {
             System.out.println(epic.getId() + " " + epic.getTitle() + " " + epic.getStatus());
             taskManager.saveToHistory(epic);
+            saveHistoryToFile(taskManager);
             return;
         }
         Subtask subtask = taskManager.getSubtaskById(id);
         if (subtask != null) {
             System.out.println(subtask.getId() + " " + subtask.getTitle() + " " + subtask.getStatus());
             taskManager.saveToHistory(subtask);
+            saveHistoryToFile(taskManager);
             return;
         } else {
             System.out.println("Id не найден");
@@ -231,6 +237,15 @@ public class Application {
     public static void removeAllTasks(TaskManager taskManager) throws Exception {
         taskManager.removeAllTasks();
         saveTasksToFile(taskManager);
+    }
+
+    public static void saveHistoryToFile(TaskManager taskManager) throws Exception {
+        FileWriter writer = new FileWriter("history.txt");
+        ArrayList<Task> history = taskManager.getHistory();
+        for (Task t : history) {
+            writer.write(t.getId() + "\n");
+        }
+        writer.close();
     }
 
     public static void saveTasksToFile(TaskManager taskManager) throws Exception {
