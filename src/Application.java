@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Application {
+
+
+    private static final String HISTORY_FILE_PATH ="history.txt";
+    private static final String TASK_FILE_PATH ="task.txt";
     public static void main(String[] args) throws Exception {
         TaskManager taskManager = new TaskManager();
         Scanner scanner = new Scanner(System.in);
@@ -172,7 +176,7 @@ public class Application {
     }
 
     public static void removeTaskById(TaskManager taskManager, Scanner scanner) throws Exception {
-        Path path = Path.of("tasks.txt");
+        Path path = Path.of(TASK_FILE_PATH);
         List<String> list = Files.readAllLines(path);
 
         System.out.println("Введите  id задачи:");
@@ -235,7 +239,7 @@ public class Application {
     }
 
     public static void saveHistoryToFile(TaskManager taskManager) throws Exception {
-        FileWriter writer = new FileWriter("history.txt");
+        FileWriter writer = new FileWriter(HISTORY_FILE_PATH);
         ArrayList<Task> history = taskManager.getHistory();
         for (Task t : history) {
             writer.write(t.getId() + "\n");
@@ -244,7 +248,7 @@ public class Application {
     }
 
     public static void saveTasksToFile(TaskManager taskManager) throws Exception {
-        FileWriter writer = new FileWriter("tasks.txt");
+        FileWriter writer = new FileWriter(TASK_FILE_PATH);
         writer.write("id,type,title,description,status,epicId\n");
         for (Task task : taskManager.getTasks()) {
             writer.write(task.getId() + ",TASK," + task.getTitle() + "," + task.getDescription() + "," + task.getStatus() + "\n");
@@ -258,7 +262,7 @@ public class Application {
         writer.close();
     }
     public static void loadHistory(TaskManager taskManager) throws Exception {
-        Path path = Path.of("history.txt");
+        Path path = Path.of(HISTORY_FILE_PATH);
         List<String> list = Files.readAllLines(path);
         for (String idStr : list) {
             //1
@@ -281,7 +285,7 @@ public class Application {
         }
     }
     public static void loadFromFile(TaskManager taskManager) throws Exception {
-        Path path = Path.of("tasks.txt");
+        Path path = Path.of(TASK_FILE_PATH);
         List<String> list = Files.readAllLines(path);
         list.remove(0);
         int maxId = 0;
