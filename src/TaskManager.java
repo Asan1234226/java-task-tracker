@@ -8,6 +8,8 @@ public class TaskManager {
     private ArrayList<Epic> epics = new ArrayList<>();
     private ArrayList<Subtask> subtasks = new ArrayList<>();
     private ArrayList<Task> history = new ArrayList<>();
+    private static final String HISTORY_FILE_PATH = "history.txt";
+    private static final String TASK_FILE_PATH = "task.txt";
     private int nextId = 1;
 
 
@@ -37,13 +39,14 @@ public class TaskManager {
         }
         return null;
     }
-     public  ArrayList<Task> getHistory() {
-        return  history;
-     }
+
+    public ArrayList<Task> getHistory() {
+        return history;
+    }
 
     public void saveToHistory(Task task) {
         history.remove(task);
-      history.addFirst(task);
+        history.addFirst(task);
     }
 
     public boolean removeTaskById(int id) throws Exception {
@@ -57,6 +60,16 @@ public class TaskManager {
             }
         }
         return false;
+    }
+
+
+    public boolean searchForaTaskByName(String text) {
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getTitle().contains(text)) {
+                    return  true;
+                }
+            }
+         return  false;
     }
 
 
@@ -80,6 +93,7 @@ public class TaskManager {
     public ArrayList<Subtask> getSubtask() {
         return subtasks;
     }
+
 
     public Subtask getSubtaskById(int id) {
         for (Subtask subtask : subtasks) {

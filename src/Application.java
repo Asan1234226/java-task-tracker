@@ -10,8 +10,9 @@ import java.util.Scanner;
 public class Application {
 
 
-    private static final String HISTORY_FILE_PATH ="history.txt";
-    private static final String TASK_FILE_PATH ="task.txt";
+    private static final String HISTORY_FILE_PATH = "history.txt";
+    private static final String TASK_FILE_PATH = "task.txt";
+
     public static void main(String[] args) throws Exception {
         TaskManager taskManager = new TaskManager();
         Scanner scanner = new Scanner(System.in);
@@ -36,6 +37,8 @@ public class Application {
                 removeAllTasks(taskManager);
             } else if (operation == 8) {
                 history(taskManager);
+            } else if (operation == 9) {
+                searchTasks(taskManager,scanner);
             } else if (operation == 0) {
                 saveTasksToFile(taskManager);
                 break;
@@ -261,6 +264,24 @@ public class Application {
         }
         writer.close();
     }
+
+
+    public static void searchTasks(TaskManager taskManager, Scanner scanner) {
+        System.out.println("Введите текст:");
+        String text = scanner.nextLine();
+        for (Task task : taskManager.getTasks()) {
+            ArrayList<Task> tasks = taskManager.getTasks();
+            if (taskManager.searchForaTaskByName(text)) {
+                System.out.println(task.getTitle());
+                for (int i = 0; i < tasks.size(); i++) {
+                    if (tasks.get(i).getDescription().contains(text)) {
+                        System.out.println(task.getDescription());
+                    }
+                }
+            }
+        }
+    }
+
     public static void loadHistory(TaskManager taskManager) throws Exception {
         Path path = Path.of(HISTORY_FILE_PATH);
         List<String> list = Files.readAllLines(path);
@@ -284,6 +305,7 @@ public class Application {
             }
         }
     }
+
     public static void loadFromFile(TaskManager taskManager) throws Exception {
         Path path = Path.of(TASK_FILE_PATH);
         List<String> list = Files.readAllLines(path);
