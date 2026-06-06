@@ -63,16 +63,6 @@ public class TaskManager {
     }
 
 
-    public boolean searchForaTaskByName(String text) {
-        for (int i = 0; i < tasks.size(); i++) {
-            if (tasks.get(i).getTitle().contains(text)) {
-                    return  true;
-                }
-            }
-         return  false;
-    }
-
-
     public void removeAllTasks() {
         tasks.clear();
         epics.clear();

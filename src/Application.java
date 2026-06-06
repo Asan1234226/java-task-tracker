@@ -55,7 +55,7 @@ public class Application {
         System.out.println("6. Обновить статус задачи");
         System.out.println("7. Удалить все задачи");
         System.out.println("8. История");
-        System.out.println("9. Посик задачи,описание");
+        System.out.println("9. Поиск задачи,описание");
         System.out.println("0. Выход");
         System.out.println("Выберите действие:");
     }
@@ -272,19 +272,19 @@ public class Application {
         String text = scanner.nextLine();
         ArrayList<Task> tasks = taskManager.getTasks();
         for (Task task : tasks) {
-            if (task.getTitle().contains(text) || task.getDescription().contains(text)) {
+            if (task.getTitle().contains(text) || task.getDescription().contains(text) || task.getTitle().toUpperCase().contains(text) || task.getDescription().toUpperCase().contains(text)) {
                 System.out.println(task.getId() + ", " + task.getTitle() + ", " + task.getDescription() + ", " + task.getStatus());
             }
         }
             ArrayList<Epic> epics = taskManager.getEpic();
             for (Epic epic : epics) {
-                if (epic.getTitle().contains(text) || epic.getDescription().contains(text)) {
+                if (epic.getTitle().contains(text) || epic.getDescription().contains(text) || epic.getTitle().toUpperCase().contains(text) || epic.getDescription().toUpperCase().contains(text)) {
                     System.out.println(epic.getId() + ", " + epic.getTitle() + ", " + epic.getDescription() + ", " + epic.getStatus());
                 }
             }
                 ArrayList<Subtask> subtasks = taskManager.getSubtask();
                 for (Subtask subtask : subtasks) {
-                    if (subtask.getTitle().contains(text) || subtask.getDescription().contains(text)) {
+                    if (subtask.getTitle().contains(text) || subtask.getDescription().contains(text) || subtask.getTitle().toUpperCase().contains(text) || subtask.getDescription().toUpperCase().contains(text)) {
                         System.out.println(subtask.getId() + ", " + subtask.getTitle() + ", " + subtask.getDescription() + ", " + subtask.getStatus());
             }
         }
