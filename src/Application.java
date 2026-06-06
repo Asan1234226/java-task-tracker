@@ -11,7 +11,7 @@ public class Application {
 
 
     private static final String HISTORY_FILE_PATH = "history.txt";
-    private static final String TASK_FILE_PATH = "task.txt";
+    private static final String TASK_FILE_PATH = "tasks.txt";
 
     public static void main(String[] args) throws Exception {
         TaskManager taskManager = new TaskManager();
@@ -38,7 +38,7 @@ public class Application {
             } else if (operation == 8) {
                 history(taskManager);
             } else if (operation == 9) {
-                searchTasks(taskManager,scanner);
+                searchTasks(taskManager, scanner);
             } else if (operation == 0) {
                 saveTasksToFile(taskManager);
                 break;
@@ -55,6 +55,7 @@ public class Application {
         System.out.println("6. Обновить статус задачи");
         System.out.println("7. Удалить все задачи");
         System.out.println("8. История");
+        System.out.println("9. Посик задачи,описание");
         System.out.println("0. Выход");
         System.out.println("Выберите действие:");
     }
@@ -269,15 +270,22 @@ public class Application {
     public static void searchTasks(TaskManager taskManager, Scanner scanner) {
         System.out.println("Введите текст:");
         String text = scanner.nextLine();
-        for (Task task : taskManager.getTasks()) {
-            ArrayList<Task> tasks = taskManager.getTasks();
-            if (taskManager.searchForaTaskByName(text)) {
-                System.out.println(task.getTitle());
-                for (int i = 0; i < tasks.size(); i++) {
-                    if (tasks.get(i).getDescription().contains(text)) {
-                        System.out.println(task.getDescription());
-                    }
+        ArrayList<Task> tasks = taskManager.getTasks();
+        for (Task task : tasks) {
+            if (task.getTitle().contains(text) || task.getDescription().contains(text)) {
+                System.out.println(task.getId() + ", " + task.getTitle() + ", " + task.getDescription() + ", " + task.getStatus());
+            }
+        }
+            ArrayList<Epic> epics = taskManager.getEpic();
+            for (Epic epic : epics) {
+                if (epic.getTitle().contains(text) || epic.getDescription().contains(text)) {
+                    System.out.println(epic.getId() + ", " + epic.getTitle() + ", " + epic.getDescription() + ", " + epic.getStatus());
                 }
+            }
+                ArrayList<Subtask> subtasks = taskManager.getSubtask();
+                for (Subtask subtask : subtasks) {
+                    if (subtask.getTitle().contains(text) || subtask.getDescription().contains(text)) {
+                        System.out.println(subtask.getId() + ", " + subtask.getTitle() + ", " + subtask.getDescription() + ", " + subtask.getStatus());
             }
         }
     }
